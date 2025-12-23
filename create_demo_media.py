@@ -104,7 +104,7 @@ def create_training_agent_gif():
         
         env.close()
         
-        # Save GIF
+        # Save GIF with infinite loop using PIL
         if frames:
             # Convert to PIL Images and resize
             pil_frames = []
@@ -113,7 +113,14 @@ def create_training_agent_gif():
                 img = img.resize((800, 600), Image.Resampling.LANCZOS)
                 pil_frames.append(img)
             
-            imageio.mimsave("assets/gifs/trained_agent_demo.gif", pil_frames, duration=0.2, loop=0)
+            # Save with PIL for better loop control
+            pil_frames[0].save(
+                "assets/gifs/trained_agent_demo.gif",
+                save_all=True,
+                append_images=pil_frames[1:],
+                duration=200,  # milliseconds per frame
+                loop=0  # 0 = infinite loop
+            )
             print("  Saved: assets/gifs/trained_agent_demo.gif (infinite loop)")
         
     except Exception as e:
@@ -154,7 +161,7 @@ def create_environment_demo_gif():
     
     env.close()
     
-    # Save GIF
+    # Save GIF with infinite loop using PIL
     if frames:
         pil_frames = []
         for frame in frames:
@@ -162,7 +169,14 @@ def create_environment_demo_gif():
             img = img.resize((800, 600), Image.Resampling.LANCZOS)
             pil_frames.append(img)
         
-        imageio.mimsave("assets/gifs/environment_demo.gif", pil_frames, duration=0.15, loop=0)
+        # Save with PIL for better loop control
+        pil_frames[0].save(
+            "assets/gifs/environment_demo.gif",
+            save_all=True,
+            append_images=pil_frames[1:],
+            duration=150,  # milliseconds per frame
+            loop=0  # 0 = infinite loop
+        )
         print("  Saved: assets/gifs/environment_demo.gif (infinite loop)")
 
 def create_visualization_screenshots():
