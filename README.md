@@ -228,12 +228,15 @@ Legend:
 ### Screenshots
 
 ![Environment Initial State](assets/screenshots/initial_state.png)
+
 *Initial state of the environment - agent starts at position [3, 0]*
 
 ![Environment Mid Game](assets/screenshots/mid_game.png)
+
 *Agent navigating through the maze with obstacles and danger zones*
 
 ![Goal Reached](assets/screenshots/goal_reached.png)
+
 *Agent successfully reaching the goal state*
 
 ### Observation Space
@@ -495,22 +498,27 @@ assignment3/
 ### Screenshots
 
 ![DQN Initial State](assets/screenshots/dqn_initial_state.png)
+
 *Initial state of continuous maze environment - agent starts at (0.1, 0.5)*
 
 ![DQN Mid Navigation](assets/screenshots/dqn_mid_navigation.png)
+
 *Agent navigating through the continuous maze*
 
 ### Training Curves
 
 ![DQN Training Curves](assets/images/dqn_training_curves.png)
+
 *Training progress: rewards, success rate, epsilon decay, and loss*
 
 ### Demo GIFs
 
 ![DQN Environment Demo](assets/gifs/dqn_environment_demo.gif)
+
 *Interactive demonstration of continuous maze environment with random agent*
 
 ![DQN Trained Agent](assets/gifs/dqn_trained_agent.gif)
+
 *Trained DQN agent navigating optimally from (0.1, 0.5) to goal*
 
 ---
@@ -553,9 +561,11 @@ The agent learns the optimal strategy:
 Visualization of learned Q-values for each action:
 
 ![Q-Table Without Lover](assets/images/q_table_no_lover.png)
+
 *Q-values before visiting lover - shows agent's strategy to reach lover first*
 
 ![Q-Table With Lover](assets/images/q_table_with_lover.png)
+
 *Q-values after visiting lover - shows agent's strategy to reach goal*
 
 ### 2. Policy Visualization
@@ -563,19 +573,23 @@ Visualization of learned Q-values for each action:
 Arrow-based policy visualization showing optimal actions:
 
 ![Policy Without Lover](assets/images/policy_no_lover.png)
+
 *Optimal policy before visiting lover - arrows show best action at each state*
 
 ![Policy With Lover](assets/images/policy_with_lover.png)
+
 *Optimal policy after visiting lover - direct path to goal*
 
 ### 3. Environment Demo GIF
 
 ![Environment Demo](assets/gifs/environment_demo.gif)
+
 *Interactive demonstration showing environment features and random agent behavior*
 
 ### 4. Trained Agent Demo GIF
 
 ![Trained Agent Demo](assets/gifs/trained_agent_demo.gif)
+
 *Trained Q-Learning agent demonstrating optimal navigation strategy*
 
 ---
