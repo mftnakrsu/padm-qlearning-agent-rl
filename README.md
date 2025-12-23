@@ -18,6 +18,7 @@
 - [Quick Start](#quick-start)
 - [Assignment 1: Custom Environment](#assignment-1-custom-environment)
 - [Assignment 2: Q-Learning Agent](#assignment-2-q-learning-agent)
+- [Assignment 3: DQN Agent](#assignment-3-dqn-agent)
 - [Results](#results)
 - [Visualizations](#visualizations)
 - [Technical Details](#technical-details)
@@ -28,10 +29,11 @@
 
 ## Overview
 
-This repository contains two assignments from the PADM course:
+This repository contains three assignments from the PADM course:
 
 1. **Assignment 1**: Custom Grid World Environment built with OpenAI Gymnasium
 2. **Assignment 2**: Q-Learning Agent that learns to navigate the environment
+3. **Assignment 3**: Deep Q-Network (DQN) Agent for continuous maze navigation
 
 The project features an Ice Age-themed maze where the agent (Scrat) must navigate through obstacles, avoid danger zones, collect rewards, and reach the goal. A special "Lover" mechanic adds strategic depth: visiting the lover multiplies the goal reward by 6x!
 
@@ -96,6 +98,13 @@ padm-qlearning-agent-rl/
 │   ├── run_trained_agent.py    # Demo trained agent
 │   ├── q_table_final_4d.npy   # Pre-trained Q-table
 │   └── README.md               # Assignment 2 documentation
+├── assignment3/                # DQN Agent
+│   ├── env.py                 # Continuous maze environment
+│   ├── DQN_model.py           # DQN neural network
+│   ├── utils.py               # Replay buffer, epsilon decay
+│   ├── main.py                # Training script
+│   ├── dqn_final.pth          # Trained DQN model
+│   └── training_curves.png     # Training statistics
 └── assets/                      # Visualizations and screenshots
     ├── images/                 # Static images
     ├── gifs/                   # Animated demonstrations
@@ -385,6 +394,124 @@ Training Statistics:
   Average Reward: 686.0
   Average Steps: 17.0
 ```
+
+---
+
+## Assignment 3: DQN Agent
+
+### Overview
+
+Assignment 3 implements a Deep Q-Network (DQN) agent for continuous maze navigation. The agent uses experience replay, target networks, and epsilon-greedy exploration to learn the optimal policy.
+
+### Requirements Met
+
+- **Epsilon decay to 0.1**: Fixed minimum epsilon of 0.1
+- **100 consecutive successes**: Agent reaches goal for 100 consecutive episodes after epsilon reaches 0.1
+- **Negative rewards**: Wall collisions (-1.0) and danger zones (-100.0)
+- **Test starting point**: (0.1, 0.5) as required
+- **Model saved**: `dqn_final.pth` contains trained weights
+- **Training curves**: `training_curves.png` shows training progress
+
+### DQN Architecture
+
+- **Input**: 2D continuous state [x, y] in [0, 1]²
+- **Output**: Q-values for 4 discrete actions [up, down, left, right]
+- **Network**: 3 hidden layers [128, 128, 64] with ReLU activation
+- **Experience Replay**: Buffer size 10,000
+- **Target Network**: Updated every 100 steps
+
+### Hyperparameters (Final Tuned Values)
+
+```python
+LEARNING_RATE = 0.001
+GAMMA = 0.99
+BATCH_SIZE = 64
+BUFFER_SIZE = 10000
+TARGET_UPDATE_FREQ = 100
+EPSILON = 1.0
+EPSILON_MIN = 0.1  # Fixed for assignment
+EPSILON_DECAY = 0.995
+```
+
+### Reward Structure
+
+| Event | Reward |
+|-------|--------|
+| Step (living cost) | -0.01 |
+| Wall collision | -1.0 |
+| Danger zone | -100.0 |
+| Goal reached | +100.0 |
+| Distance shaping | +0.1 × (1 - distance) |
+
+### Training Process
+
+```bash
+cd assignment3
+python main.py
+```
+
+The training will:
+1. Decay epsilon to 0.1
+2. Continue until 100 consecutive successes
+3. Save model as `dqn_final.pth`
+4. Generate `training_curves.png`
+
+### Test Agent
+
+```python
+from env import ContinuousMazeEnv
+from DQN_model import DQN
+from main import DQNAgent
+import torch
+
+env = ContinuousMazeEnv(render_mode="human")
+agent = DQNAgent(state_dim=2, action_dim=4)
+agent.q_network.load_state_dict(torch.load("dqn_final.pth"))
+
+# Test from (0.1, 0.5) - default reset position
+state, _ = env.reset()
+done = False
+while not done:
+    action = agent.select_action(state, training=False)  # Greedy policy
+    state, reward, done, truncated, _ = env.step(action)
+    env.render()
+    
+env.close()
+```
+
+### File Structure
+
+```
+assignment3/
+├── env.py                 # Continuous maze environment (with final reward structure)
+├── DQN_model.py           # DQN neural network architecture
+├── utils.py               # Replay buffer, epsilon decay functions
+├── main.py                # Training script (with final hyperparameters)
+├── create_demo_media.py   # Script to generate screenshots and GIFs
+├── dqn_final.pth          # Trained DQN model weights
+└── training_curves.png    # Training statistics visualization
+```
+
+### Screenshots
+
+![DQN Initial State](assets/screenshots/dqn_initial_state.png)
+*Initial state of continuous maze environment - agent starts at (0.1, 0.5)*
+
+![DQN Mid Navigation](assets/screenshots/dqn_mid_navigation.png)
+*Agent navigating through the continuous maze*
+
+### Training Curves
+
+![DQN Training Curves](assets/images/dqn_training_curves.png)
+*Training progress: rewards, success rate, epsilon decay, and loss*
+
+### Demo GIFs
+
+![DQN Environment Demo](assets/gifs/dqn_environment_demo.gif)
+*Interactive demonstration of continuous maze environment with random agent*
+
+![DQN Trained Agent](assets/gifs/dqn_trained_agent.gif)
+*Trained DQN agent navigating optimally from (0.1, 0.5) to goal*
 
 ---
 
