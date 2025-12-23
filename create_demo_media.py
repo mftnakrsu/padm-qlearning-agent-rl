@@ -113,8 +113,8 @@ def create_training_agent_gif():
                 img = img.resize((800, 600), Image.Resampling.LANCZOS)
                 pil_frames.append(img)
             
-            imageio.mimsave("assets/gifs/trained_agent_demo.gif", pil_frames, duration=0.2)
-            print("  Saved: assets/gifs/trained_agent_demo.gif")
+            imageio.mimsave("assets/gifs/trained_agent_demo.gif", pil_frames, duration=0.2, loop=0)
+            print("  Saved: assets/gifs/trained_agent_demo.gif (infinite loop)")
         
     except Exception as e:
         print(f"  Error creating GIF: {e}")
@@ -162,8 +162,8 @@ def create_environment_demo_gif():
             img = img.resize((800, 600), Image.Resampling.LANCZOS)
             pil_frames.append(img)
         
-        imageio.mimsave("assets/gifs/environment_demo.gif", pil_frames, duration=0.15)
-        print("  Saved: assets/gifs/environment_demo.gif")
+        imageio.mimsave("assets/gifs/environment_demo.gif", pil_frames, duration=0.15, loop=0)
+        print("  Saved: assets/gifs/environment_demo.gif (infinite loop)")
 
 def create_visualization_screenshots():
     """Create screenshots of Q-table and policy visualizations."""
